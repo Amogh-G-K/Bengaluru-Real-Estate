@@ -1,0 +1,33 @@
+{% extends 'index.html' %} {% block content %}
+<form action="Estimation" method="post">
+  {% csrf_token %}
+  <select name="locations" id="loca">
+    {% for loc in locations %}
+    <option>{{loc}}</option>
+    {% endfor %}
+  </select>
+  <br />
+  <br />
+  <label for="sqft">Total Square Feet</label>
+  <input type="number" name="sqft" />
+  <br />
+  <br />
+  <label for="bath">No. of Bath</label>
+  <input type="number" name="bath" />
+  <br />
+  <br />
+  <label for="bhk">Total Rooms(Bedroom, hall, kitchen)</label>
+  <input type="number" name="bhk" />
+  <br />
+  <br />
+  <button type="submit" id="sub">Submit</button>
+</form>
+
+<script>
+  var btn = document.
+</script>
+
+<h1 id="est"></h1>
+
+<h1>Bye Matie!</h1>
+{% endblock %}
