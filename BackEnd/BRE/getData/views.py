@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.template import loader
 from django.http import JsonResponse
+import json
 
 from getData.util import *
 #import util
@@ -14,8 +15,13 @@ def index(request):
 
 def estimation(request):
     print("called")
-    #est = getPredictions(request.POST['locations'],request.POST['sqft'],request.POST['bath'],request.POST['bhk'])
-    print(request)
-    data = {"body" :{"Hello":123456} }
-    return JsonResponse({"Hello":"HI"})
-    #return redirect(request.META['HTTP_REFERER'])
+    print(request.POST)
+    print(json.loads(request.body))
+    req = json.loads(request.body)
+    print(req['locations'])
+    print(req['sqft'])
+    print(req['bath'])
+    print(req['bhk'])
+    est = getPredictions(req['locations'],req['sqft'],req['bath'],req['bhk'])
+    print(est);
+    return JsonResponse({"FinalEstimation":est})

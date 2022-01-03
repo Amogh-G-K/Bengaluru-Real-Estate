@@ -1,7 +1,7 @@
 {% extends 'index.html' %} {% block content %}
 <form action="Estimation" method="post" id="ester">
   {% csrf_token %}
-  <select name="locations" id="loca">
+  <select name="locations" id="loca" required>
     {% for loc in locations %}
     <option>{{loc}}</option>
     {% endfor %}
@@ -9,40 +9,56 @@
   <br />
   <br />
   <label for="sqft">Total Square Feet</label>
-  <input type="number" name="sqft" />
+  <input type="number" name="sqft" required />
   <br />
   <br />
   <label for="bath">No. of Bath</label>
-  <input type="number" name="bath" />
+  <input type="number" name="bath" required />
   <br />
   <br />
   <label for="bhk">Total Rooms(Bedroom, hall, kitchen)</label>
-  <input type="number" name="bhk" />
+  <input type="number" name="bhk" required />
   <br />
   <br />
   <button type="submit" id="sub">Submit</button>
 </form>
+<h1 id="est"></h1>
 
 <script>
-  /*document.getElementById("sub").addEventListener("click", function (e) {
-    e.preventDefault();
-  });*/
   console.log("scripting");
   let ester = document.getElementById("ester");
+  let finalEst;
   ester.onsubmit = async (e) => {
     e.preventDefault();
-    console.log("sending response");
-    await fetch("http://127.0.0.1:8000/Estimation", {
-      method: "POST",
-      body: new FormData(ester),
-    }).then((response) => {
-      console.log(response);
-      alert(response.body);
+    var data = new FormData(ester);
+    console.log({
+      locations: data.get("locations"),
+      sqft: data.get("sqft"),
+      bath: data.get("bath"),
+      bhk: data.get("bhk"),
     });
+    fetch("http://127.0.0.1:8000/Estimation", {
+      method: "POST",
+      body: JSON.stringify({
+        locations: data.get("locations"),
+        sqft: data.get("sqft"),
+        bath: data.get("bath"),
+        bhk: data.get("bhk"),
+      }),
+      /*headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },*/
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data.FinalEstimation);
+        finalEst = data.FinalEstimation;
+        document.getElementById("est").innerHTML =
+          "Cost Estimation is " + finalEst;
+      })
+      .catch((err) => console.log(err));
   };
 </script>
-
-<h1 id="est"></h1>
 
 <h1>Bye Matie!</h1>
 {% endblock %}
